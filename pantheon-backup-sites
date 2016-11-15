@@ -1,0 +1,4 @@
+# Here we place drush aliases for the remote sites of which we want to back up.
+# Adjacent to this is the folder in /var/shared/assets where they will be backed up to
+
+@pantheon.drupal-8-backup-test.dev     drupal-8-test
