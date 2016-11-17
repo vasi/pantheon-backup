@@ -7,6 +7,7 @@ SKIP_TABLES=cache_bootstrap,cache_config,cache_container,cache_data,cache_defaul
 
 
 while read -r ALIAS DIRECTROY _; do
-    mkdir -p $BACKUP_FOLDER/$DIRECTROY/
-    drush "$ALIAS" sql-dump --skip-tables-list "$SKIP_TABLES" > $BACKUP_FOLDER/$DIRECTROY/"$(echo $ALIAS | grep -Pe '[^.]*$' -o)"-db-$(date +"%Y-%m-%d_%H-%M").sql
+    mkdir -p $BACKUP_FOLDER/$DIRECTROY/archive/$(echo $ALIAS | grep -Pe '[^.]*$' -o)
+    drush "$ALIAS" sql-dump --skip-tables-list "$SKIP_TABLES" > $BACKUP_FOLDER/$DIRECTROY/archive/$(echo $ALIAS | grep -Pe '[^.]*$' -o)/$(echo $ALIAS | grep -Pe '[^.]*$' -o)-db-$(date +"%Y-%m-%d_%H-%M").sql
+    ln -sf $BACKUP_FOLDER/$DIRECTROY/archive/$(echo $ALIAS | grep -Pe '[^.]*$' -o)/$(ls $BACKUP_FOLDER/$DIRECTROY/archive/$(echo $ALIAS | grep -Pe '[^.]*$' -o) -t | head -n1) $BACKUP_FOLDER/$DIRECTROY/$(echo $ALIAS | grep -Pe '[^.]*$' -o).latest.sql
 done < <(grep -v '^$\|^\s*\#' /etc/pantheon-backup-sites)
