@@ -17,7 +17,9 @@ grep -o -E '^[^#]+' "$CONFIG_FILE" | while read CONFIGS; do
 
     DATE="$(date +%F-%R)"
     FILE="$DIR/$BRANCH_NAME-$DATE.sql.gz"
-    drush "$ALIAS" sql-dump --gzip --skip-tables-list "$SKIP_TABLES" > "$FILE" \
-      < /dev/null
-    gzip -cd < "$FILE" > "$DIR/$BRANCH_NAME.sql"
+    if drush "$ALIAS" sql-dump --gzip --skip-tables-list "$SKIP_TABLES" > "$FILE" < /dev/null; then
+      gzip -cd < "$FILE" > "$DIR/$BRANCH_NAME.sql"
+    else
+      echo "Error fetching $ALIAS"
+    fi
 done
