@@ -10,6 +10,7 @@ grep -o -E '^[^#]+' "$CONFIG_FILE" | while read CONFIGS; do
     ALIAS="$(echo "$CONFIGS" | awk -F: '{print $1}')"
     DIRECTORY="$(echo "$CONFIGS" | awk -F: '{print $2}')"
     BRANCH_NAME="$(echo "$ALIAS" | awk -F. '{print $NF}')"
+    echo "Fetching $ALIAS"
 
     DIR="$BACKUP_FOLDER/$DIRECTORY/archive/$BRANCH_NAME"
     mkdir -p "$DIR"
