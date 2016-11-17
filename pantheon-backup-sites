@@ -1,4 +1,11 @@
 # Here we place drush aliases for the remote sites of which we want to back up.
 # Adjacent to this is the folder in /var/shared/assets where they will be backed up to
+# Write in the alias starting with the @ sign. To view all available aliases run 'drush sa'
+# We separate the alias and the folder it is placed in using a colon
+# if the folder does not exist it will automatically be created
 
-@pantheon.drupal-8-backup-test.dev     drupal-8-test
+
+#Alias:Folder
+@pantheon.drupal-8-example.dev:example-folder
+@pantheon.drupal-8-example.test:example-folder
+@pantheon.drupal-8-example.live:example-folder
