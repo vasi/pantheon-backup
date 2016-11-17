@@ -17,6 +17,7 @@ grep -o -E '^[^#]+' "$CONFIG_FILE" | while read CONFIGS; do
 
     DATE="$(date +%F-%R)"
     FILE="$DIR/$BRANCH_NAME-$DATE.sql"
-    drush "$ALIAS" sql-dump --skip-tables-list "$SKIP_TABLES" > "$FILE"
+    drush "$ALIAS" sql-dump --skip-tables-list "$SKIP_TABLES" > "$FILE" \
+      < /dev/null
     ln -sfn "$FILE" "$DIR/$BRANCH_NAME.sql"
 done
