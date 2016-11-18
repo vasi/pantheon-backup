@@ -30,8 +30,7 @@ grep -o -E '^[^#]+' "$CONFIG_FILE" | while read CONFIGS; do
     DATE="$(date +%F-%R)"
     FILE="$DIR/$BRANCH_NAME-$DATE.sql.gz"
 
-
-    if drush "$ALIAS" sql-dump --structure-tables-list "$TABLES" --gzip \
+    if drush "$ALIAS" sql-dump --structure-tables-list="$TABLES" --gzip \
         > "$FILE" < /dev/null; then
       gzip -cd < "$FILE" > "$DIR/$BRANCH_NAME.sql"
     else
