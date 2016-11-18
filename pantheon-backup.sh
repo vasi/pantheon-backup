@@ -2,7 +2,7 @@
 
 set -e
 
-CONFIG_FILE=${CONFIG_FILE:-/etc/pantheon-backup-sites}
+CONFIG_FILE=${CONFIG_FILE:-"$(dirname $0)/config"}
 BACKUP_FOLDER=${BACKUP_FOLDER:-/var/shared/assets}
 SKIP_TABLES='cache*,watchdog,sessions,search_index,search_dataset,search_total'
 
