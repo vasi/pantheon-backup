@@ -11,6 +11,14 @@ grep -o -E '^[^#]+' "$CONFIG_FILE" | while read CONFIGS; do
     DIRECTORY="$(echo "$CONFIGS" | awk -F: '{print $2}')"
     PREFIX="$(echo "$CONFIGS" | awk -F: '{print $3}')"
     BRANCH_NAME="$(echo "$ALIAS" | awk -F. '{print $NF}')"
+
+    # Make sure the site has a new enough Drush version
+    DRUSH_VERSION="$(drush --strict=0 "$ALIAS" version --pipe < /dev/null)"
+    if echo "$DRUSH_VERSION" | grep -q -E '^[123456]\.'; then
+      echo "Drush version $DRUSH_VERSION for site $ALIAS is too old, skipping"
+      continue
+    fi
+
     echo "Fetching $ALIAS"
 
     DIR="$BACKUP_FOLDER/$DIRECTORY/archive/$BRANCH_NAME"
