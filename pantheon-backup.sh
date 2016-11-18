@@ -9,11 +9,15 @@ SKIP_TABLES='cache*,watchdog,sessions,search_index,search_dataset,search_total'
 grep -o -E '^[^#]+' "$CONFIG_FILE" | while read CONFIGS; do
     ALIAS="$(echo "$CONFIGS" | awk -F: '{print $1}')"
     DIRECTORY="$(echo "$CONFIGS" | awk -F: '{print $2}')"
+    PREFIX="$(echo "$CONFIGS" | awk -F: '{print $3}')"
     BRANCH_NAME="$(echo "$ALIAS" | awk -F. '{print $NF}')"
     echo "Fetching $ALIAS"
 
     DIR="$BACKUP_FOLDER/$DIRECTORY/archive/$BRANCH_NAME"
     mkdir -p "$DIR"
+
+    # Add a prefix to the tables
+    TABLES=$(echo "$SKIP_TABLES" | sed -Ee "s/(^|,)/\1$PREFIX/g")
 
     DATE="$(date +%F-%R)"
     FILE="$DIR/$BRANCH_NAME-$DATE.sql.gz"
