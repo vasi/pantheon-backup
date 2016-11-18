@@ -4,7 +4,7 @@ set -e
 
 CONFIG_FILE=${CONFIG_FILE:-/etc/pantheon-backup-sites}
 BACKUP_FOLDER=${BACKUP_FOLDER:-/var/shared/assets}
-SKIP_TABLES=cache_bootstrap,cache_config,cache_container,cache_data,cache_default,cache_discovery,cache_dynamic_page_cache,cache_entity,cache_menu,cache_render,cachetags,watchdog,sessions,search_index,search_dataset,search_total
+SKIP_TABLES='cache*,watchdog,sessions,search_index,search_dataset,search_total'
 
 grep -o -E '^[^#]+' "$CONFIG_FILE" | while read CONFIGS; do
     ALIAS="$(echo "$CONFIGS" | awk -F: '{print $1}')"
