@@ -21,7 +21,7 @@ class Environment
 
     output = nil
     if out
-      ok = system(*cmd, :out => out)
+      ok = system(*cmd, :out => out.fileno)
     else
       output, status = Open3.capture2(*cmd)
       ok = status.success?
@@ -33,7 +33,7 @@ class Environment
   # Get the Drush major version, as an integer. May be in environment info,
   # or may require a request.
   def drush_version
-    self[:drush_version] || drush('version', '--pipe').to_i
+    super || drush('version', '--pipe').to_i
   end
 
   def sqldump(file, db_prefix = nil)
@@ -46,7 +46,7 @@ class Environment
     end
 
     # Write to a temp file, then rename it
-    tmp = Tempfile.new(['drush', File.extname(file)], File.dirname(file))
+    tmp = Tempfile.new(['.drush', File.extname(file)], File.dirname(file))
     drush(tmp, *cmd)
     File.rename(tmp, file)
   end

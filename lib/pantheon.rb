@@ -18,7 +18,7 @@ class Pantheon
       uri = URI(uri)
 
       # If it's a post, add the data
-      req = (post ? Net::HTTP::Post : Net::HTTP::Get).new(uri)
+      req = (post ? Net::HTTP::Post : Net::HTTP::Get).new(uri.request_uri)
       req['User-Agent'] = 'Terminus' # Required by Pantheon
       if post
         req['Content-Type'] = 'application/json'

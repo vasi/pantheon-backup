@@ -20,7 +20,7 @@ class Environment < OpenStruct
 
   # Must be provisioned
   def can_backup?
-    self[:target_commit]
+    self.target_commit
   end
 
   def hostname
