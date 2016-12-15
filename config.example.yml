@@ -1,0 +1,34 @@
+# What file holds the Pantheon machine token?
+# https://dashboard.pantheon.io/users/#account/tokens/
+token: token
+
+# What file holds a SSH private key with Pantheon access?
+# https://pantheon.io/docs/ssh-keys/
+sshkey: id_pantheon
+
+# What directory should backups go in?
+destination: /var/backup
+
+# How long should backups be kept?
+#
+# This uses exponential intervals: For each integer n,
+# n backups will be kept newer than (base * backoff^n) days.
+#
+# For example, with the following settings, you might have backups 0, 1, 2, 4,
+# 8 and 16 days old.
+expiry:
+  backoff: 2
+  base: 0.5
+
+# Custom settings per-site.
+# If a file has no entry here, it will still be backed up, just with default
+# settings.
+sites:
+  # Key is the site name according to Pantheon
+  bobs-site:
+    # Custom subdirectory within `destination`. Defaults to the site name.
+    # In this example, backups will be named like:
+    #   /var/backup/bob/pantheon/my-env/drupal-2016-01-30.sql.gz
+    directory: bob
+    # Custom database prefix. Defaults to none.
+    prefix: bob_
