@@ -36,7 +36,30 @@ class Environment
     super || drush('version', '--pipe').to_i
   end
 
-  def sqldump(file, db_prefix = nil)
+  # Drush sometimes puts garbage error messages at the start of a file.
+  # Try to detect this, and fix it.
+  def gzfix(file, dest)
+    gzip_header = "\x1f\x8b".force_encoding(Encoding::ASCII_8BIT)
+    limit = 1024
+
+    # Read a few lines, looking for gzip header
+    file.rewind
+    10.times do |i|
+      line = file.readline(limit).force_encoding(Encoding::ASCII_8BIT)
+      if line[0,2] == gzip_header # Found gzip!
+        if i == 0
+          File.rename(file, dest) # Whole file is ok
+        else # Use the file from this line on
+          IO.copy_stream(file, dest, -1, file.pos - line.size)
+        end
+        return
+      end
+      break unless line.ascii_only? # Doesn't look like header lines
+    end
+    raise "sqldump didn't seem to give us gzip data"
+  end
+
+  def sqldump(dest, db_prefix = nil)
     wake
     cmd = ['sql-dump', '--gzip']
     if drush_version >= 7
@@ -46,9 +69,9 @@ class Environment
     end
 
     # Write to a temp file, then rename it
-    tmp = Tempfile.new(['.drush', File.extname(file)], File.dirname(file))
+    tmp = Tempfile.new(['.drush', File.extname(dest)], File.dirname(dest))
     drush(tmp, *cmd)
-    File.rename(tmp, file)
+    gzfix(tmp, dest)
   end
 end
 end
