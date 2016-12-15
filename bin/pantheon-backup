@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+require 'logger'
+require 'optparse'
+require 'pantheon'
+
+options = {
+  :config => 'config.yml',
+  :log => STDERR,
+  :loglevel => 'WARN',
+}
+
+OptionParser.new do |op|
+  op.banner = <<EOB
+pantheon-backup — Backup Drupal sites from Pantheon
+
+Usage: pantheon-backup [OPTIONS] -c config.yml
+EOB
+  op.separator ''
+
+  op.on('-c', '--config=FILE', 'Config file (default: config.yml)') do |f|
+    options[:config] = f
+  end
+  op.on('--log=FILE', 'Log file (default: stderr)') do |f|
+    options[:log] = f
+  end
+  op.on('-l', '--loglevel=LEVEL', 'Log level (default: WARN)') do |v|
+    options[:loglevel] = v
+  end
+end.parse!
+
+logger = Logger.new(options[:log])
+logger.level = Logger.const_get(options[:loglevel].upcase)
+
+backup = Pantheon::Backup.new(options[:config], logger)
+backup.backup
