@@ -11,7 +11,7 @@ options = {
 
 OptionParser.new do |op|
   op.banner = <<EOB
-pantheon-backup — Backup Drupal sites from Pantheon
+pantheon-backup - Backup Drupal sites from Pantheon
 
 Usage: pantheon-backup [OPTIONS] -c config.yml
 EOB
