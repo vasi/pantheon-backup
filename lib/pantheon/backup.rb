@@ -1,5 +1,7 @@
+require 'date'
 require 'logrotate'
 require 'pathname'
+require 'time'
 require 'threadpool'
 require 'yaml'
 
@@ -28,7 +30,7 @@ class Backup
   def backup_env(env, conf)
     dir = directory(env.site.name) + env.name
     dir.mkpath
-    file = dir + Date.today.strftime(FilePat)
+    file = dir + Time.now.strftime(FilePat)
     @logger.info('Backing up ' + env.fullname)
     env.sqldump(file.to_s, conf['prefix'])
   end
