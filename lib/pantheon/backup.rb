@@ -7,7 +7,7 @@ class Pantheon
 class Backup
   Threads = 8
   Current = 'drupal.sql.gz'
-  FilePat = 'drupal-%F.sql.gz'
+  FilePat = 'drupal-%F-%R.sql.gz'
 
   def initialize(conffile, logger)
     @conf = YAML.load_file(conffile)
